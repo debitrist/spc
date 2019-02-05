@@ -1,0 +1,31 @@
+{%extends "layout.html"%}
+{%block content%}
+<link rel="stylesheet" href={{cdn_css | safe}} type="text/css" />
+<script type="text/javascript" src={{cdn_js | safe}}></script>
+
+<div class="about">
+    <h1>Annotated Stock Price Chart</h1>
+
+        <p>
+            Inputs required:<br>
+
+            <form action="{{url_for('success_table')}}" method="POST">
+                Company Name (i.e Tesla): <input type="text" value="Tesla" name="Company Name">  <br />
+                Stock Ticker (i.e TSLA): <input type="text" value="TSLA" name="Ticker">  <br />
+                Returns Lookback Period (Days i.e 1 for 1 Day Returns): <input type="text" value="1" name="ReturnsLBperiod" />  <br />
+                Returns Percentile (i.e 0.01 for bottom 1% percentile) : <input type="text" value="0.01" name="ReturnsQuantile" />  <br />
+                Stock Price Dates (Years i.e 2 for 2 Year Historical Share Price Chart from Today) : <input type="text" value="2" name="StockPricePeriod" />  <br />
+
+                <input type="submit" name= "form" value="Submit" />
+            </form>
+        </p>
+</div>
+
+<div class="output">
+        {{script1 | safe}}
+        {{div1 | safe}}
+        {{text|safe}}
+        {% include btn ignore missing %}
+</div>
+
+{%endblock%}
