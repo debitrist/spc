@@ -117,7 +117,7 @@ def success_table():
             pages_to_scrape = 25
             counter_headlines = scrape_reuters(company_name, pages_to_scrape)  # scrape company news
             counter_headlines.columns = ['Company headlines', 'Company links']
-            market_headlines = scrape_reuters(market_name, pages_to_scrape*0.8)  # scrape market news
+            market_headlines = scrape_reuters(market_name, pages_to_scrape)  # scrape market news
             market_headlines.columns = ['Market headlines', 'Market links']
             all_headlines = pd.concat([counter_headlines, market_headlines], axis=1, sort=False)
 
