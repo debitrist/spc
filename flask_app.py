@@ -178,8 +178,7 @@ def success_table():
                 else:
                     p.add_layout(BoxAnnotation(left=i, right=j, fill_alpha=0.4, fill_color='green'))
                     
-            p.add_tools(HoverTool(tooltips=[( 'date','df.index{%F}'),('close','df['Close']{%0.2f}'),],formatters={'date': 'datetime', # use 'datetime' formatter for 'date' field
-            'close' : 'printf',}, mode='vline'))
+
 
 
             script1, div1 = components(p)
