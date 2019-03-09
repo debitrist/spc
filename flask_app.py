@@ -114,11 +114,11 @@ def success_table():
 
                 return grouped_news
 
-            market_name='nasdaq composite'
+            market_name='nasdaq'
             pages_to_scrape = 25
             counter_headlines = scrape_reuters(company_name, pages_to_scrape)  # scrape company news
             counter_headlines.columns = ['Company headlines', 'Company links']
-            market_headlines = scrape_reuters(market_name, pages_to_scrape*0.4)  # scrape market news
+            market_headlines = scrape_reuters(market_name, pages_to_scrape)  # scrape market news
             market_headlines.columns = ['Market headlines', 'Market links']
             all_headlines = pd.concat([counter_headlines, market_headlines], axis=1, sort=False)
 
@@ -130,6 +130,7 @@ def success_table():
             df_filtered = df[criteria_1 | criteria_2]
 
             df_news = df_filtered.join(all_headlines)
+            df3=df.join(counter_headlines)
 
             # creating Drawdown dates table
             df_news.index = pd.to_datetime(df_news.index)
@@ -153,7 +154,6 @@ def success_table():
             df["Status"]=[inc_dec(c,o) for c, o in zip(df.Close,df.Open)]
             df["Middle"]=(df.Open+df.Close)/2
             df["Height"]=abs(df.Close-df.Open)
-            
 
             p=figure(x_axis_type='datetime', width=1000, height=300)
             p.title.text="Stock Price Chart for  "+str(company_name)+" from "+str(start.strftime('%m/%d/%Y'))+" to "+str(end.strftime('%m/%d/%Y'))+", shaded areas represent bottom "+str(round(100*ReturnsQuantile,1))+"%/ top "+ str(round(100*(1-ReturnsQuantile),1))+"% percentile of "+str(ReturnsLBperiod) +"-day returns"
@@ -168,8 +168,18 @@ def success_table():
 
             p.rect(df.index[df.Status=="Decrease"],df.Middle[df.Status=="Decrease"],
                    hours_12, df.Height[df.Status=="Decrease"],fill_color="#FF3333",line_color="black")
-            
-            
+
+            source = ColumnDataSource(data={
+                'date': np.array(df.index.values, dtype=np.datetime64),
+                'close': df['Close'],
+                'SP move': df['% Change'],
+                'news': df3['Company headlines'].values
+                })
+
+            p.line(x='date', y='close', line_width=2, color='black', source=source)
+
+            p.add_tools(HoverTool(tooltips=[('date', '@date{%F}'), ('close', '$@close{%0.2f}'),('SP move', '@{SP move}%'),('news', '@news{safe}')],
+                                  formatters={'date': 'datetime', 'close': 'printf'}, mode='vline'))
 
             ##shading returns period on candlestick chart
             for i, j, k in zip(DDStart, DDEnd, df_news['% Change'].values):
@@ -177,9 +187,6 @@ def success_table():
                     p.add_layout(BoxAnnotation(left=i, right=j, fill_alpha=0.4, fill_color='red'))
                 else:
                     p.add_layout(BoxAnnotation(left=i, right=j, fill_alpha=0.4, fill_color='green'))
-                    
-
-
 
             script1, div1 = components(p)
             cdn_js=CDN.js_files[0]
