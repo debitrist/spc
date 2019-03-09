@@ -152,8 +152,17 @@ def success_table():
             df["Status"]=[inc_dec(c,o) for c, o in zip(df.Close,df.Open)]
             df["Middle"]=(df.Open+df.Close)/2
             df["Height"]=abs(df.Close-df.Open)
+            
+            HoverTool(tooltips=[
+        ( 'date',   '@date{%F}'            ),
+        ( 'close',  '$@{adj close}{%0.2f}' ), # use @{ } for field names with spaces
+        ( 'volume', '@volume{0.00 a}'      ),],    formatters={
+        'date'      : 'datetime', # use 'datetime' formatter for 'date' field
+        'adj close' : 'printf',   # use 'printf' formatter for 'adj close' field
+                                  # use default 'numeral' formatter for other fields},    # display a tooltip whenever the cursor is vertically in line with a glyph
+            mode='vline')
 
-            p=figure(x_axis_type='datetime', width=1000, height=300)
+            p=figure(x_axis_type='datetime', width=1000, height=300, tooltips=TOOLTIPS)
             p.title.text="Stock Price Chart for  "+str(company_name)+" from "+str(start.strftime('%m/%d/%Y'))+" to "+str(end.strftime('%m/%d/%Y'))+", shaded areas represent bottom "+str(round(100*ReturnsQuantile,1))+"%/ top "+ str(round(100*(1-ReturnsQuantile),1))+"% percentile of "+str(ReturnsLBperiod) +"-day returns"
             p.grid.grid_line_alpha=0.3
 
