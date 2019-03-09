@@ -136,6 +136,7 @@ def success_table():
             DDStart = DDEnd - pd.Timedelta(days=ReturnsLBperiod)
 
             df2 = pd.DataFrame({"Returns Date": DDEnd, "% Return": np.round(df_news['% Change'].values, 2), str(company_name)+"-related Headlines": df_news['Company headlines'].values, "Source: Reuter links":df_news['Company links'].values, "Market Headlines": df_news['Market headlines'].values})
+            df2=df2.dropna(how='all')    #to drop if all values in the row are nan
 
 
             ##creating candlestick chart:
