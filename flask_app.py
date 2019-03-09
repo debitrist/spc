@@ -155,7 +155,7 @@ def success_table():
             df["Height"]=abs(df.Close-df.Open)
             
 
-            p=figure(x_axis_type='datetime', width=1000, height=300, tooltips=TOOLTIPS)
+            p=figure(x_axis_type='datetime', width=1000, height=300)
             p.title.text="Stock Price Chart for  "+str(company_name)+" from "+str(start.strftime('%m/%d/%Y'))+" to "+str(end.strftime('%m/%d/%Y'))+", shaded areas represent bottom "+str(round(100*ReturnsQuantile,1))+"%/ top "+ str(round(100*(1-ReturnsQuantile),1))+"% percentile of "+str(ReturnsLBperiod) +"-day returns"
             p.grid.grid_line_alpha=0.3
 
