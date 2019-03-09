@@ -7,6 +7,7 @@ import requests
 import re
 import time
 from bokeh.plotting import figure, show, output_file
+from bokeh.models import ColumnDataSource, HoverTool
 from bokeh.embed import components
 from bokeh.resources import CDN
 from bokeh.models.annotations import BoxAnnotation
