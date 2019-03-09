@@ -176,21 +176,8 @@ def success_table():
                 else:
                     p.add_layout(BoxAnnotation(left=i, right=j, fill_alpha=0.4, fill_color='green'))
                     
-            p.add_tools(HoverTool(
-    tooltips=[
-        ( 'date',   '$x{%F}'            ),
-        ( 'close',  '$y{%0.2f}' ), # use @{ } for field names with spaces
-       ,],
-
-    formatters={
-        'date'      : 'datetime', # use 'datetime' formatter for 'date' field
-        'close' : 'printf',   # use 'printf' formatter for 'adj close' field
-                                  # use default 'numeral' formatter for other fields
-    },
-
-    # display a tooltip whenever the cursor is vertically in line with a glyph
-    mode='vline'
-))
+            p.add_tools(HoverTool(tooltips=[( 'date','$x{%F}'),('close','$y{%0.2f}'),],formatters={'date': 'datetime', # use 'datetime' formatter for 'date' field
+            'close' : 'printf',}, mode='vline'))
 
 
             script1, div1 = components(p)
