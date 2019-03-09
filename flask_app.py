@@ -168,6 +168,8 @@ def success_table():
 
             p.rect(df.index[df.Status=="Decrease"],df.Middle[df.Status=="Decrease"],
                    hours_12, df.Height[df.Status=="Decrease"],fill_color="#FF3333",line_color="black")
+            
+            
 
             ##shading returns period on candlestick chart
             for i, j, k in zip(DDStart, DDEnd, df_news['% Change'].values):
@@ -176,7 +178,7 @@ def success_table():
                 else:
                     p.add_layout(BoxAnnotation(left=i, right=j, fill_alpha=0.4, fill_color='green'))
                     
-            p.add_tools(HoverTool(tooltips=[( 'date','$x{%F}'),('close','$y{%0.2f}'),],formatters={'date': 'datetime', # use 'datetime' formatter for 'date' field
+            p.add_tools(HoverTool(tooltips=[( 'date','$df.index{%F}'),('close','df['Close']{%0.2f}'),],formatters={'date': 'datetime', # use 'datetime' formatter for 'date' field
             'close' : 'printf',}, mode='vline'))
 
 
