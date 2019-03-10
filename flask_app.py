@@ -15,7 +15,7 @@ from bokeh.models.annotations import BoxAnnotation
 
 app=Flask(__name__)
 
-@app.route('/plot/')
+@app.route('/')
 def plot():
 
     return render_template("plot.html", text=str("Please key in inputs and click the 'Submit' button to generate chart!"))
@@ -142,32 +142,13 @@ def success_table():
 
 
             ##creating candlestick chart:
-            def inc_dec(c, o):
-                if c > o:
-                    value="Increase"
-                elif c < o:
-                    value="Decrease"
-                else:
-                    value="Equal"
-                return value
 
-            df["Status"]=[inc_dec(c,o) for c, o in zip(df.Close,df.Open)]
-            df["Middle"]=(df.Open+df.Close)/2
-            df["Height"]=abs(df.Close-df.Open)
 
             p=figure(x_axis_type='datetime', width=1000, height=300)
             p.title.text="Stock Price Chart for  "+str(company_name)+" from "+str(start.strftime('%m/%d/%Y'))+" to "+str(end.strftime('%m/%d/%Y'))+", shaded areas represent bottom "+str(round(100*ReturnsQuantile,1))+"%/ top "+ str(round(100*(1-ReturnsQuantile),1))+"% percentile of "+str(ReturnsLBperiod) +"-day returns"
             p.grid.grid_line_alpha=0.3
 
-            hours_12=12*60*60*1000
 
-            p.segment(df.index, df.High, df.index, df.Low, color="Black")
-
-            p.rect(df.index[df.Status=="Increase"],df.Middle[df.Status=="Increase"],
-                   hours_12, df.Height[df.Status=="Increase"],fill_color="#CCFFFF",line_color="black")
-
-            p.rect(df.index[df.Status=="Decrease"],df.Middle[df.Status=="Decrease"],
-                   hours_12, df.Height[df.Status=="Decrease"],fill_color="#FF3333",line_color="black")
 
             source = ColumnDataSource(data={
                 'date': np.array(df.index.values, dtype=np.datetime64),
@@ -201,9 +182,9 @@ def success_table():
         except Exception as e:
             return render_template("plot.html", text=str(e))
 
-@app.route('/')
-def home():
-    return render_template("home.html")
+@app.route('/about/')
+def about():
+    return render_template("about.html")
 
 if __name__=="__main__":
     app.run(debug=True)
